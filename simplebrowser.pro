@@ -31,6 +31,8 @@ FORMS += \
 
 RESOURCES += data/simplebrowser.qrc
 
+RC_FILE= data/resource.rc
+
 # install
 target.path = $$[QT_INSTALL_EXAMPLES]/webenginewidgets/simplebrowser
 INSTALLS += target

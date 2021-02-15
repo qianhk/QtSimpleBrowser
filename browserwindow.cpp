@@ -557,8 +557,11 @@ void BrowserWindow::handleTestDllTriggered() {
     HRESULT result = getRoamingAppDataPath(&path);
     if (result == S_OK) {
         wprintf(L"lookKai invoke getKnownFolderPath success: %ls\n", path);
+        QMessageBox::information(this, "dll invoke", QString::fromWCharArray(path));
     } else {
         wprintf(L"lookKai invoke getKnownFolderPath failed: %lu\n", result);
+        QMessageBox::critical(this,"dll invoke","invoke failed");
+//        QMessageBox::information(this, "dll invoke", "");
     }
 
 }

@@ -25,13 +25,18 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #    endif()
 #endif()
 
+set(CMAKE_PREFIX_PATH $ENV{QTDIR-5_15_2})
+message("CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}")
+
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets Network REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR}WebEngineWidgets REQUIRED)
 #find_package(Qt${QT_VERSION_MAJOR}Network REQUIRED)
 ADD_DEFINITIONS(-DUNICODE -D_UNICODE)
 
-message(“lookKai QT_VERSION_MAJOR=${QT_VERSION_MAJOR}”)
+message("QT_VERSION_MAJOR=${QT_VERSION_MAJOR}")
+
+add_subdirectory(DllFunc)
 
 set(PROJECT_SOURCES
         main.cpp
@@ -103,4 +108,4 @@ else ()
     endif ()
 endif ()
 
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::WebEngineWidgets)
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::WebEngineWidgets DllFunc)

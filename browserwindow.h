@@ -91,6 +91,7 @@ private slots:
 #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
     void handleFindTextFinished(const QWebEngineFindTextResult &result);
 #endif
+    void handleTestDllTriggered();
 
 private:
     QMenu *createFileMenu(TabWidget *tabWidget);

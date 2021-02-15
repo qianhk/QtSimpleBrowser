@@ -70,6 +70,7 @@
 #include <QWebEngineFindTextResult>
 #endif
 #include <QWebEngineProfile>
+#include "DllFunc/library.h"
 
 BrowserWindow::BrowserWindow(Browser *browser, QWebEngineProfile *profile, bool forDevTools)
     : m_browser(browser)
@@ -333,6 +334,7 @@ QMenu *BrowserWindow::createHelpMenu()
 {
     QMenu *helpMenu = new QMenu(tr("&Help"));
     helpMenu->addAction(tr("About &Qt"), qApp, QApplication::aboutQt);
+    helpMenu->addAction("Test调用dll", this, &BrowserWindow::handleTestDllTriggered);
     return helpMenu;
 }
 
@@ -548,4 +550,17 @@ void BrowserWindow::handleFindTextFinished(const QWebEngineFindTextResult &resul
                                                                QString::number(result.numberOfMatches())));
     }
 }
+
+void BrowserWindow::handleTestDllTriggered() {
+    hello();
+    PWSTR path;
+    HRESULT result = getRoamingAppDataPath(&path);
+    if (result == S_OK) {
+        wprintf(L"lookKai invoke getKnownFolderPath success: %ls\n", path);
+    } else {
+        wprintf(L"lookKai invoke getKnownFolderPath failed: %lu\n", result);
+    }
+
+}
+
 #endif

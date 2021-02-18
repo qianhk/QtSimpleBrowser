@@ -66,25 +66,19 @@
 #include <QStatusBar>
 #include <QToolBar>
 #include <QVBoxLayout>
+
 #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+
 #include <QWebEngineFindTextResult>
+
 #endif
+
 #include <QWebEngineProfile>
 #include "DllFunc/library.h"
 
 BrowserWindow::BrowserWindow(Browser *browser, QWebEngineProfile *profile, bool forDevTools)
-    : m_browser(browser)
-    , m_profile(profile)
-    , m_tabWidget(new TabWidget(profile, this))
-    , m_progressBar(nullptr)
-    , m_historyBackAction(nullptr)
-    , m_historyForwardAction(nullptr)
-    , m_stopAction(nullptr)
-    , m_reloadAction(nullptr)
-    , m_stopReloadAction(nullptr)
-    , m_urlLineEdit(nullptr)
-    , m_favAction(nullptr)
-{
+        : m_browser(browser), m_profile(profile), m_tabWidget(new TabWidget(profile, this)), m_progressBar(nullptr), m_historyBackAction(nullptr), m_historyForwardAction(nullptr),
+          m_stopAction(nullptr), m_reloadAction(nullptr), m_stopReloadAction(nullptr), m_urlLineEdit(nullptr), m_favAction(nullptr) {
     setAttribute(Qt::WA_DeleteOnClose, true);
     setFocusPolicy(Qt::ClickFocus);
 
@@ -120,7 +114,7 @@ BrowserWindow::BrowserWindow(Browser *browser, QWebEngineProfile *profile, bool 
 
     connect(m_tabWidget, &TabWidget::titleChanged, this, &BrowserWindow::handleWebViewTitleChanged);
     if (!forDevTools) {
-        connect(m_tabWidget, &TabWidget::linkHovered, [this](const QString& url) {
+        connect(m_tabWidget, &TabWidget::linkHovered, [this](const QString &url) {
             statusBar()->showMessage(url);
         });
         connect(m_tabWidget, &TabWidget::loadProgress, this, &BrowserWindow::handleWebViewLoadProgress);
@@ -140,24 +134,25 @@ BrowserWindow::BrowserWindow(Browser *browser, QWebEngineProfile *profile, bool 
         QAction *focusUrlLineEditAction = new QAction(this);
         addAction(focusUrlLineEditAction);
         focusUrlLineEditAction->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_L));
-        connect(focusUrlLineEditAction, &QAction::triggered, this, [this] () {
+        connect(focusUrlLineEditAction, &QAction::triggered, this, [this]() {
             m_urlLineEdit->setFocus(Qt::ShortcutFocusReason);
         });
     }
 
     handleWebViewTitleChanged(QString());
     m_tabWidget->createTab();
+    mTestA = 100;
+    mTestPb = new int;
+    *mTestPb = 120;
 }
 
-QSize BrowserWindow::sizeHint() const
-{
+QSize BrowserWindow::sizeHint() const {
     QRect desktopRect = QApplication::primaryScreen()->geometry();
     QSize size = desktopRect.size() * qreal(0.9);
     return size;
 }
 
-QMenu *BrowserWindow::createFileMenu(TabWidget *tabWidget)
-{
+QMenu *BrowserWindow::createFileMenu(TabWidget *tabWidget) {
     QMenu *fileMenu = new QMenu(tr("&File"));
     fileMenu->addAction(tr("&New Window"), this, &BrowserWindow::handleNewWindowTriggered, QKeySequence::New);
     fileMenu->addAction(tr("New &Incognito Window"), this, &BrowserWindow::handleNewIncognitoWindowTriggered);
@@ -180,7 +175,7 @@ QMenu *BrowserWindow::createFileMenu(TabWidget *tabWidget)
     });
     fileMenu->addAction(closeTabAction);
 
-    QAction *closeAction = new QAction(tr("&Quit"),this);
+    QAction *closeAction = new QAction(tr("&Quit"), this);
     closeAction->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Q));
     connect(closeAction, &QAction::triggered, this, &QWidget::close);
     fileMenu->addAction(closeAction);
@@ -194,8 +189,7 @@ QMenu *BrowserWindow::createFileMenu(TabWidget *tabWidget)
     return fileMenu;
 }
 
-QMenu *BrowserWindow::createEditMenu()
-{
+QMenu *BrowserWindow::createEditMenu() {
     QMenu *editMenu = new QMenu(tr("&Edit"));
     QAction *findAction = editMenu->addAction(tr("&Find"));
     findAction->setShortcuts(QKeySequence::Find);
@@ -220,8 +214,7 @@ QMenu *BrowserWindow::createEditMenu()
     return editMenu;
 }
 
-QMenu *BrowserWindow::createViewMenu(QToolBar *toolbar)
-{
+QMenu *BrowserWindow::createViewMenu(QToolBar *toolbar) {
     QMenu *viewMenu = new QMenu(tr("&View"));
     m_stopAction = viewMenu->addAction(tr("&Stop"));
     QList<QKeySequence> shortcuts;
@@ -261,9 +254,9 @@ QMenu *BrowserWindow::createViewMenu(QToolBar *toolbar)
 
 
     viewMenu->addSeparator();
-    QAction *viewToolbarAction = new QAction(tr("Hide Toolbar"),this);
+    QAction *viewToolbarAction = new QAction(tr("Hide Toolbar"), this);
     viewToolbarAction->setShortcut(tr("Ctrl+|"));
-    connect(viewToolbarAction, &QAction::triggered, [toolbar,viewToolbarAction]() {
+    connect(viewToolbarAction, &QAction::triggered, [toolbar, viewToolbarAction]() {
         if (toolbar->isVisible()) {
             viewToolbarAction->setText(tr("Show Toolbar"));
             toolbar->close();
@@ -289,8 +282,7 @@ QMenu *BrowserWindow::createViewMenu(QToolBar *toolbar)
     return viewMenu;
 }
 
-QMenu *BrowserWindow::createWindowMenu(TabWidget *tabWidget)
-{
+QMenu *BrowserWindow::createWindowMenu(TabWidget *tabWidget) {
     QMenu *menu = new QMenu(tr("&Window"));
 
     QAction *nextTabAction = new QAction(tr("Show Next Tab"), this);
@@ -317,7 +309,7 @@ QMenu *BrowserWindow::createWindowMenu(TabWidget *tabWidget)
         menu->addAction(previousTabAction);
         menu->addSeparator();
 
-        QVector<BrowserWindow*> windows = m_browser->windows();
+        QVector<BrowserWindow *> windows = m_browser->windows();
         int index(-1);
         for (auto window : windows) {
             QAction *action = menu->addAction(window->windowTitle(), this, &BrowserWindow::handleShowWindowTriggered);
@@ -330,16 +322,15 @@ QMenu *BrowserWindow::createWindowMenu(TabWidget *tabWidget)
     return menu;
 }
 
-QMenu *BrowserWindow::createHelpMenu()
-{
+QMenu *BrowserWindow::createHelpMenu() {
     QMenu *helpMenu = new QMenu(tr("&Help"));
     helpMenu->addAction(tr("About &Qt"), qApp, QApplication::aboutQt);
     helpMenu->addAction("Test调用dll", this, &BrowserWindow::handleTestDllTriggered);
+    helpMenu->addAction("Test Calc", this, &BrowserWindow::handleTestCalcTriggered);
     return helpMenu;
 }
 
-QToolBar *BrowserWindow::createToolBar()
-{
+QToolBar *BrowserWindow::createToolBar() {
     QToolBar *navigationBar = new QToolBar(tr("Navigation"));
     navigationBar->setMovable(false);
     navigationBar->toggleViewAction()->setEnabled(false);
@@ -405,31 +396,29 @@ QToolBar *BrowserWindow::createToolBar()
     return navigationBar;
 }
 
-void BrowserWindow::handleWebActionEnabledChanged(QWebEnginePage::WebAction action, bool enabled)
-{
+void BrowserWindow::handleWebActionEnabledChanged(QWebEnginePage::WebAction action, bool enabled) {
     switch (action) {
-    case QWebEnginePage::Back:
-        m_historyBackAction->setEnabled(enabled);
-        break;
-    case QWebEnginePage::Forward:
-        m_historyForwardAction->setEnabled(enabled);
-        break;
-    case QWebEnginePage::Reload:
-        m_reloadAction->setEnabled(enabled);
-        break;
-    case QWebEnginePage::Stop:
-        m_stopAction->setEnabled(enabled);
-        break;
-    default:
-        qWarning("Unhandled webActionChanged signal");
+        case QWebEnginePage::Back:
+            m_historyBackAction->setEnabled(enabled);
+            break;
+        case QWebEnginePage::Forward:
+            m_historyForwardAction->setEnabled(enabled);
+            break;
+        case QWebEnginePage::Reload:
+            m_reloadAction->setEnabled(enabled);
+            break;
+        case QWebEnginePage::Stop:
+            m_stopAction->setEnabled(enabled);
+            break;
+        default:
+            qWarning("Unhandled webActionChanged signal");
     }
 }
 
-void BrowserWindow::handleWebViewTitleChanged(const QString &title)
-{
+void BrowserWindow::handleWebViewTitleChanged(const QString &title) {
     QString suffix = m_profile->isOffTheRecord()
-        ? tr("Qt Simple Browser (Incognito)")
-        : tr("Qt Simple Browser");
+                     ? tr("Qt Simple Browser (Incognito)")
+                     : tr("Qt Simple Browser");
 
     if (title.isEmpty())
         setWindowTitle(suffix);
@@ -437,29 +426,25 @@ void BrowserWindow::handleWebViewTitleChanged(const QString &title)
         setWindowTitle(title + " - " + suffix);
 }
 
-void BrowserWindow::handleNewWindowTriggered()
-{
+void BrowserWindow::handleNewWindowTriggered() {
     BrowserWindow *window = m_browser->createWindow();
     window->m_urlLineEdit->setFocus();
 }
 
-void BrowserWindow::handleNewIncognitoWindowTriggered()
-{
+void BrowserWindow::handleNewIncognitoWindowTriggered() {
     BrowserWindow *window = m_browser->createWindow(/* offTheRecord: */ true);
     window->m_urlLineEdit->setFocus();
 }
 
-void BrowserWindow::handleFileOpenTriggered()
-{
+void BrowserWindow::handleFileOpenTriggered() {
     QUrl url = QFileDialog::getOpenFileUrl(this, tr("Open Web Resource"), QString(),
-                                                tr("Web Resources (*.html *.htm *.svg *.png *.gif *.svgz);;All files (*.*)"));
+                                           tr("Web Resources (*.html *.htm *.svg *.png *.gif *.svgz);;All files (*.*)"));
     if (url.isEmpty())
         return;
     currentTab()->setUrl(url);
 }
 
-void BrowserWindow::handleFindActionTriggered()
-{
+void BrowserWindow::handleFindActionTriggered() {
     if (!currentTab())
         return;
     bool ok = false;
@@ -479,8 +464,7 @@ void BrowserWindow::handleFindActionTriggered()
     }
 }
 
-void BrowserWindow::closeEvent(QCloseEvent *event)
-{
+void BrowserWindow::closeEvent(QCloseEvent *event) {
     if (m_tabWidget->count() > 1) {
         int ret = QMessageBox::warning(this, tr("Confirm close"),
                                        tr("Are you sure you want to close the window ?\n"
@@ -495,18 +479,15 @@ void BrowserWindow::closeEvent(QCloseEvent *event)
     deleteLater();
 }
 
-TabWidget *BrowserWindow::tabWidget() const
-{
+TabWidget *BrowserWindow::tabWidget() const {
     return m_tabWidget;
 }
 
-WebView *BrowserWindow::currentTab() const
-{
+WebView *BrowserWindow::currentTab() const {
     return m_tabWidget->currentWebView();
 }
 
-void BrowserWindow::handleWebViewLoadProgress(int progress)
-{
+void BrowserWindow::handleWebViewLoadProgress(int progress) {
     static QIcon stopIcon(QStringLiteral(":process-stop.png"));
     static QIcon reloadIcon(QStringLiteral(":view-refresh.png"));
 
@@ -523,25 +504,23 @@ void BrowserWindow::handleWebViewLoadProgress(int progress)
     }
 }
 
-void BrowserWindow::handleShowWindowTriggered()
-{
-    if (QAction *action = qobject_cast<QAction*>(sender())) {
+void BrowserWindow::handleShowWindowTriggered() {
+    if (QAction *action = qobject_cast<QAction *>(sender())) {
         int offset = action->data().toInt();
-        QVector<BrowserWindow*> windows = m_browser->windows();
+        QVector<BrowserWindow *> windows = m_browser->windows();
         windows.at(offset)->activateWindow();
         windows.at(offset)->currentTab()->setFocus();
     }
 }
 
-void BrowserWindow::handleDevToolsRequested(QWebEnginePage *source)
-{
+void BrowserWindow::handleDevToolsRequested(QWebEnginePage *source) {
     source->setDevToolsPage(m_browser->createDevToolsWindow()->currentTab()->page());
     source->triggerAction(QWebEnginePage::InspectElement);
 }
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
-void BrowserWindow::handleFindTextFinished(const QWebEngineFindTextResult &result)
-{
+
+void BrowserWindow::handleFindTextFinished(const QWebEngineFindTextResult &result) {
     if (result.numberOfMatches() == 0) {
         statusBar()->showMessage(tr("\"%1\" not found.").arg(m_lastSearch));
     } else {
@@ -552,6 +531,12 @@ void BrowserWindow::handleFindTextFinished(const QWebEngineFindTextResult &resul
 }
 
 void BrowserWindow::handleTestDllTriggered() {
+    const char *fileName = "C:\\Documents and Settings\\Administrator\\Cookies\\index.dat";
+    HANDLE m_hFile = CreateFileA(fileName, GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_READONLY, NULL);
+    if (m_hFile == INVALID_HANDLE_VALUE) {
+        //MessageBoxA(NULL, "Error", "Can't open the index.dat file.", MB_OKCANCEL);
+    }
+
     hello();
     PWSTR path;
     HRESULT result = getRoamingAppDataPath(&path);
@@ -560,10 +545,23 @@ void BrowserWindow::handleTestDllTriggered() {
         QMessageBox::information(this, "dll invoke", QString::fromWCharArray(path));
     } else {
         wprintf(L"lookKai invoke getKnownFolderPath failed: %lu\n", result);
-        QMessageBox::critical(this,"dll invoke","invoke failed");
+        QMessageBox::critical(this, "dll invoke", "invoke failed");
 //        QMessageBox::information(this, "dll invoke", "");
     }
-
+    delete mTestPb;
+    mTestPb = new int;
+    *mTestPb = 120;
+    setStatusTip(QString("testA=%1 testB=%2").arg(mTestA).arg(*mTestPb));
 }
+
+void BrowserWindow::handleTestCalcTriggered() {
+    --mTestA;
+    --*mTestPb;
+    setStatusTip(QString("testA=%1 testB=%2 addrA=0x%3 addrB=0x%4")
+                         .arg(mTestA).arg(*mTestPb)
+                         .arg((long long) &mTestA, 0, 16, QLatin1Char('0'))
+                         .arg((long long) mTestPb, 0, 16, QLatin1Char('0')));
+}
+
 
 #endif

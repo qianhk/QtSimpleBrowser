@@ -92,6 +92,7 @@ private slots:
     void handleFindTextFinished(const QWebEngineFindTextResult &result);
 #endif
     void handleTestDllTriggered();
+    void handleTestCalcTriggered();
 
 private:
     QMenu *createFileMenu(TabWidget *tabWidget);
@@ -114,6 +115,8 @@ private:
     QLineEdit *m_urlLineEdit;
     QAction *m_favAction;
     QString m_lastSearch;
+    int mTestA;
+    int *mTestPb;
 };
 
 #endif // BROWSERWINDOW_H

@@ -1,0 +1,149 @@
+数据类型：
+QString
+QDate
+QTime
+QVariant .type() .toXX() ::value
+QColor QPalette
+qreal qint8
+
+容器：
+QList QLinkedList QVector
+QHash QMap QMultiHash QMultiMap
+const_iterator constBegin constEnd
+
+QStringList
+
+函数：
+qMax() qRound() qAbs() qSwap()
+
+UI控件：
+QLabel
+QLineEdit
+QComboBox
+QSplitter
+QDockWidget
+QStackedWidget
+QProgressBar
+QToolBox QToolButton
+QLCDNumber
+QFontComboBox
+QListWidget
+QTableWidget
+QTreeWidget
+
+
+布局：
+QVBoxLayout
+QHBoxLayout
+QGridLayout
+
+对话框：
+QFileDialog :: getOpenFileName getSaveFileName getExistingDirectory getOpenFileNames
+QColorDialog :: getColor
+QFontDialog :: getFont
+QInputDialog :: getText getItem getInt getDouble
+QMessageBox :: question information warning critical about aboutQt
+QProgressDialog QApplication::processEvents();
+QPrintDialog
+
+QMatrix
+
+
+#include <sys/stat.h>
+struct timespec ts, ts1;
+ts.tv_nsec = 500000000;    // 1500ms
+ts.tv_sec = 1;
+nanosleep(&ts, &ts1)
+#include <unistd.h>
+usleep(3 * 1000 * 1000);
+
+位置相关函数：
+含标题栏左上角的： x() y() pos()  frameGeometry()
+不含标题栏及边框(如有)的：geometry() width() height() size() rect()(原点始终为0)
+
+模型/视图 MVC
+QListView
+QTableView
+QTreeView
+
+QDirModel
+QAbstractTableModel
+QAbstractItemView
+
+
+文件及磁盘处理
+QFile
+QTextStream
+QDataStream
+QTemporaryFile
+QFileInfo
+QFileSystemWatcher
+
+Qt网络通信
+QHostInfo::fromName  .addresses()
+QNetworkInterface::allInterfaces()
+QNetworkInterface.name .hardwareAddress .addressEntries() entry.ip .netmask .broadcast
+
+QHostAddress
+QUdpSocket
+QTcpSocket
+QTcpServer
+
+QNetworkRequest
+QNetworkAccessManager
+QNetworkReply
+
+事件处理:
+mousePressEvent
+mouseMoveEvent
+mouseReleaseEvent
+QMouseEvent *e->button() x()
+
+keyPressEvent
+QKeyEvent e->modifiers() key()
+
+QWidget::installEventFilter(xxx);
+bool XXX::eventFilter(QObject *watched, QEvent *event)
+
+多线程：
+QThread
+QMutex QMutexLocker
+QSemaphore .acquire() .release()
+QWaitCondition .wait(&mutex) .wakeAll .wakeOne
+
+数据库:
+QSqlDatabase
+QSqlQuery
+QSqlRecord
+QSqlTableModel QSqlRelationalTableModel
+
+COM:
+QAxObject
+QAxWidget
+操作Microsoft Office： Excel Word
+
+Qt多国语言国际化：
+QObject::tr()
+QTranslator::Load() installTranslator()
+lupdate linguist lrelease
+
+Qt单元测试框架：
+QTestLib
+
+Qt综合实例：
+电子商城系统
+MyWord字处理软件：QMdiSubWindow QSignalMapper
+微信客户端程序
+
+Qt扩展应用：OpenCV
+OpenCV图片处理
+综合实例：医院远程诊断系统
+
+
+QML、Qt Quick及QML综合实例多功能文档查看器
+
+
+
+
+
+

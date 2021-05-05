@@ -74,7 +74,11 @@
 #endif
 
 #include <QWebEngineProfile>
+
+#ifdef WIN32
 #include "DllFunc/library.h"
+#endif
+
 
 BrowserWindow::BrowserWindow(Browser *browser, QWebEngineProfile *profile, bool forDevTools)
         : m_browser(browser), m_profile(profile), m_tabWidget(new TabWidget(profile, this)), m_progressBar(nullptr), m_historyBackAction(nullptr), m_historyForwardAction(nullptr),
@@ -133,9 +137,9 @@ BrowserWindow::BrowserWindow(Browser *browser, QWebEngineProfile *profile, bool 
 
         QAction *focusUrlLineEditAction = new QAction(this);
         addAction(focusUrlLineEditAction);
-        focusUrlLineEditAction->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_L));
+        focusUrlLineEditAction->setShortcut(QKeySequence(Qt::Modifier::CTRL | Qt::Key::Key_L));
         connect(focusUrlLineEditAction, &QAction::triggered, this, [this]() {
-            m_urlLineEdit->setFocus(Qt::ShortcutFocusReason);
+            m_urlLineEdit->setFocus(Qt::FocusReason::ShortcutFocusReason);
         });
     }
 
@@ -531,6 +535,7 @@ void BrowserWindow::handleFindTextFinished(const QWebEngineFindTextResult &resul
 }
 
 void BrowserWindow::handleTestDllTriggered() {
+#ifdef WIN32
     const char *fileName = "C:\\Documents and Settings\\Administrator\\Cookies\\index.dat";
     HANDLE m_hFile = CreateFileA(fileName, GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_READONLY, NULL);
     if (m_hFile == INVALID_HANDLE_VALUE) {
@@ -552,6 +557,7 @@ void BrowserWindow::handleTestDllTriggered() {
     mTestPb = new int;
     *mTestPb = 120;
     setStatusTip(QString("testA=%1 testB=%2").arg(mTestA).arg(*mTestPb));
+#endif
 }
 
 void BrowserWindow::handleTestCalcTriggered() {

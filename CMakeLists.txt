@@ -9,7 +9,7 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # QtCreator supports the following variables for Android, which are identical to qmake Android variables.
@@ -36,7 +36,10 @@ ADD_DEFINITIONS(-DUNICODE -D_UNICODE)
 
 message("QT_VERSION_MAJOR=${QT_VERSION_MAJOR}")
 
-add_subdirectory(DllFunc)
+IF (WIN32)
+    add_subdirectory(DllFunc)
+    set(WIN_LIBS ${WIN_LIBS} DllFunc)
+ENDIF ()
 
 set(PROJECT_SOURCES
         main.cpp
@@ -108,4 +111,4 @@ else ()
     endif ()
 endif ()
 
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::WebEngineWidgets DllFunc)
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::WebEngineWidgets ${WIN_LIBS})

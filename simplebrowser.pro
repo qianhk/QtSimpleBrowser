@@ -33,7 +33,12 @@ RESOURCES += data/simplebrowser.qrc
 
 RC_FILE= data/resource.rc
 
-LIBS += -L$$PWD/DllFunc/bin/debug/ -lDllFunc
+win32 {
+    message("in win32")
+    LIBS += -L$$PWD/DllFunc/bin/debug/ -lDllFunc
+}
+
+CONFIG += sdk_no_version_check
 
 # install
 target.path = $$[QT_INSTALL_EXAMPLES]/webenginewidgets/simplebrowser
